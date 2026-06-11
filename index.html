@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baby Logs</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+    text-align:center;
+    padding:20px;
+}
+
+h1{
+    color:#333;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    max-width:350px;
+    margin:20px auto;
+}
+
+button{
+    font-size:24px;
+    padding:25px;
+    border:none;
+    border-radius:16px;
+    background:white;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+#logs{
+    max-width:500px;
+    margin:20px auto;
+    text-align:left;
+}
+
+.log{
+    background:white;
+    padding:12px;
+    margin:8px 0;
+    border-radius:10px;
+    box-shadow:0 1px 4px rgba(0,0,0,.1);
+}
+</style>
+</head>
+
+<body>
+
+<h1>👶 Baby Logs</h1>
+
+<div class="buttons">
+    <button onclick="addLog('🍼 Bottle')">🍼 Bottle</button>
+    <button onclick="addLog('💩 Poop')">💩 Poop</button>
+    <button onclick="addLog('💧 Pee')">💧 Pee</button>
+    <button onclick="addLog('😴 Sleep')">😴 Sleep</button>
+</div>
+
+<h2>Today's Logs</h2>
+
+<div id="logs"></div>
+
+<script>
+let logs = JSON.parse(localStorage.getItem('babyLogs')) || [];
+
+function addLog(type){
+    const now = new Date();
+
+    const entry = {
+        type:type,
+        time:now.toLocaleString()
+    };
+
+    logs.unshift(entry);
+
+    localStorage.setItem(
+        'babyLogs',
+        JSON.stringify(logs)
+    );
+
+    renderLogs();
+}
+
+function renderLogs(){
+    const container = document.getElementById('logs');
+
+    container.innerHTML='';
+
+    logs.forEach(log=>{
+        container.innerHTML += `
+            <div class="log">
+                ${log.type}<br>
+                <small>${log.time}</small>
+            </div>
+        `;
+    });
+}
+
+renderLogs();
+</script>
+
+</body>
+</html>
